@@ -4,34 +4,61 @@ This repository provides a shared library that can be used for high performance 
 
 The related kdb library that uses this shared object can be found here - [https://github.com/jasraj/kdb-base64](https://github.com/jasraj/kdb-base64).
 
-## Compiling
-
-### Pre-requisites
+## Pre-requisites
 
 To compile this project, you must ensure the standard build tools for your OS are available.
 
-If you want to build the shared object for 32-bit kdb as well as 64-bit kdb processes, ensure the following packages are available:
+If you require the 32-bit version of the shared library (to use with 32-bit kdb+), it can be cross-compiled if you have the 32-bit build tools available:
 
-* gcc-multilib
-* g++-multilib
+* Ubuntu: `apt install libsystemd-dev:i386 gcc-multilib g++-multilib`
+* CentOS: `yum install glibc-devel.i686 libgcc.i686 libstdc++-devel.i686 ncurses-devel.i686 systemd-devel.i686`
 
-If you are using Ubuntu, you'll need to explicitly enable 32-bit library installation:
-
-```
-> dpkg --add-architecture i386
-> apt-get update
-```
-
-### Compilation
-
-To compile, use `make`:
+Ubuntu may also need to explicitly enable 32-bit library installation:
 
 ```
-# Compile the 32 and 64-bit versions of the shared library
-make all
-
-# Only compile the 64-bit version
-make build_init build_lib_64
+dpkg --add-architecture i386
+apt-get update
 ```
 
-The build output folder can be customised by specifying a target folder in the environment variable `KBL_OUT`.
+## Compilation
+
+To compile, use `cmake`:
+
+```
+# Create build in a local 'build' folder within the repo
+mkdir build
+cd build
+cmake ..
+cmake --build .
+```
+
+To cross-compile the 32-bit version of the shared library:
+
+```
+mkdir build-32
+cd build-32
+cmake .. -DCMAKE_CXX_FLAGS=-m32
+cmake --build .
+```
+
+## Installation
+
+To install the shared library on the current server:
+
+```
+sudo cmake --install .
+```
+
+To build a TAR GZ, RPM or DEB containing the shared library, use `cpack`:
+
+```
+# Build all package types
+cpack .
+
+# Only build one of the package types
+cpack -G TGZ .
+cpack -G RPM .
+cpack -G DEB .
+```
+
+Note that the packages generated do not differentiate between 32-bit and 64-bit builds; they should be manually renamed to account for this
