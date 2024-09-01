@@ -1,5 +1,11 @@
 # Shared Library for Base64 Encoding and Decoding
 
+---
+
+### NOTE: This repository has been archived, with [https://github.com/jasraj/kdb-cpp-common-lib](https://github.com/jasraj/kdb-cpp-common-lib) replacing it.
+
+---
+
 This repository provides a shared library that can be used for high performance Base64 encoding and decoding.
 
 The related kdb library that uses this shared object can be found here - [https://github.com/jasraj/kdb-base64](https://github.com/jasraj/kdb-base64).
